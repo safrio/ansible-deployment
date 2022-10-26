@@ -1,5 +1,6 @@
 ---
 - hosts: elastic
+  become: yes
   gather_facts: no
   vars:
     image: ads
@@ -8,3 +9,8 @@
       copy:
         src: './containers'
         dest: '~/elastic/'
+    - name: deploy Docker Compose stack
+      community.docker.docker_compose:
+        project_src: ~/elastic/containers
+        files:
+        - docker-compose.yml
