@@ -1,0 +1,41 @@
+filebeat.inputs:
+- type: docker
+  containers.ids: '*'
+
+filebeat.autodiscover:
+  providers:
+    - type: docker
+      templates:
+        - condition.or:
+            - contains.docker.container.name: ads
+            - contains.docker.container.name: auth
+            - contains.docker.container.name: geocoder
+          config:
+            - type: container
+              paths:
+                - '/usr/share/dockerlogs/data/${data.docker.container.id}/*.log'
+              exclude_lines: ["^\\s+[\\-`('.|_]"]
+
+processors:
+- add_docker_metadata:
+    host: "unix:///var/run/docker.sock"
+
+- decode_json_fields:
+    fields: ["message"]
+    target: "json"
+    overwrite_keys: true
+
+# setup:
+#   kibana:
+#     host: "http://kibana:5601"
+output.logstash:
+  hosts: ["logstash:5044"]
+# output:
+#   console:
+#     pretty: true
+#     bulk_max_size: 1
+
+logging:
+  json: true
+  metrics.enabled: false
+  level: info

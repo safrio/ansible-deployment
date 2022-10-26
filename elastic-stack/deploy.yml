@@ -1,0 +1,10 @@
+---
+- hosts: elastic
+  gather_facts: no
+  vars:
+    image: ads
+  tasks:
+    - name: upload configs
+      copy:
+        src: './containers'
+        dest: '~/elastic/'

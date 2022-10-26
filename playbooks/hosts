@@ -1,0 +1,17 @@
+[db]
+safrio-pg
+
+[rabbitmq]
+safrio-pg
+
+[nginx]
+safrio-pg
+
+[app]
+safrio-pg
+
+[elastic]
+safrio-pg
+
+[all:vars]
+ansible_user=deploy
